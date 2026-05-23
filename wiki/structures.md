@@ -1,5 +1,5 @@
 # Structures
 
-- If a `.str` file exists in a directory, that directory is then treated as a Struct.
-- Any sibling `.fun` files in the same directory are automatically bound as its methods and injected with an implicit `self` keyword.
-- If a method intends to modify the Struct's data, its static contract must declare `mut self` at the very top.
+- If a `.str` file exists in a directory, that directory is considered as a Struct.
+- There can only be one `.str` file per directory.
+- Any `.met` files in the directory are considered structure methods. If a `.met` file needs to modify its struct, `mut self` must be explicity written on the very first line of the file.
