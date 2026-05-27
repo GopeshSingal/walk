@@ -19,7 +19,7 @@ Optionals (`?`) and Errors(`!`) must be explicitly handled. Conditionals are use
 ```
 # user.nickname is a String? (Optional)
 if let name = user.nickname {
-    print(name) // 'name' is statically guaranteed to be a valid string here
+    print(name) # 'name' is statically guaranteed to be a valid string here
 } else {
     print("No nickname provided!")
 }
