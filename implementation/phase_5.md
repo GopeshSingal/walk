@@ -6,5 +6,5 @@ C requires all data types and functions to be declared before they are called. T
 ## Implementation
 
 ### Monolithic Forward Declarations
-* Loop over all validated ".fun" and ".met" AST nodes. Translate their parameter signatures into standard C function headers.
-* Concatenate these directly underneath the sorted struct definitions to form the "walk_generated_headers.h" string.
+* Loop over all validated `.fun` and `.met` AST nodes. Translate their parameter signatures into standard C function headers.
+* Concatenate these directly underneath the sorted struct definitions to form the `walk_generated_headers.h` string.
