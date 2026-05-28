@@ -54,33 +54,55 @@ extra-doc-files:    CHANGELOG.md
 common warnings
     ghc-options: -Wall
 
-executable walk-compiler
-    -- Import common warning flags.
-    import:           warnings
-
-    -- .hs or .lhs file containing the Main module.
-    main-is:          Main.hs
-
-    -- Modules included in this executable, other than Main.
-    other-modules:
-        Lexer,
-        Snapshot
-
-    -- LANGUAGE extensions used by modules in this package.
-    -- other-extensions:
-
-    -- Other library packages from which modules are imported.
+common deps
     build-depends:
         base ^>=4.18.3.0,
+        async,
         text,
         megaparsec,
         containers,
         mtl,
         filepath,
         directory
+    default-language: GHC2021
+
+library
+    import: warnings, deps
+    hs-source-dirs: src
+    exposed-modules: AST, Lexer, Parser, Snapshot
+
+executable walk-compiler
+    -- Import common warning flags.
+    import:           warnings, deps
+
+    -- .hs or .lhs file containing the Main module.
+    main-is:          Main.hs
+
+    -- Modules included in this executable, other than Main.
+
+    -- LANGUAGE extensions used by modules in this package.
+    -- other-extensions:
+
+    -- Other library packages from which modules are imported.
+    build-depends: walk-compiler
 
     -- Directories containing source files.
-    hs-source-dirs:   app, src
+    hs-source-dirs:   app
 
     -- Base language which the package is written in.
+
+test-suite snapshot-test
+    import: warnings
+    type: exitcode-stdio-1.0
+    main-is: SnapshotTest.hs
+    hs-source-dirs: test
+    build-depends:
+        base ^>=4.18.3.0,
+        text,
+        containers,
+        filepath,
+        directory,
+        walk-compiler,
+        tasty ^>=1.5,
+        tasty-hunit ^>=0.10
     default-language: GHC2021
