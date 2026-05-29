@@ -12,7 +12,7 @@ import Data.Text (Text)
 import Data.Void (Void)
 import Lexer
 import Snapshot (ExtensionKind (..), ProjectSnapshot (..), fileExtensionKind, snapshotFiles)
-import Text.Megaparsec (Parsec, eof, errorBundlePretty, many, runParser, try)
+import Text.Megaparsec (Parsec, eof, errorBundlePretty, many, runParser, try, optional)
 import qualified Data.Map.Strict as Map
 
 data ParseError
@@ -53,18 +53,17 @@ parseEntry (path, text) =
                 Left (ParseFailed path "not a Walk source file")
 
 foldResults :: [Either ParseError (FilePath, WalkAST)] -> Either ParseError (Map FilePath WalkAST)
-foldResults = foldr go (Right Map.empty)
-    where
-        go (Left err) _ = Left err
-        go (Right pair) (Right acc) = Right (uncurry Map.insert pair acc)
-        go _ (Left _) = error "impossible"
+foldResults results = 
+    case sequence results of
+        Left err -> Left err
+        Right pairs -> Right (Map.fromList pairs)
 
 funFile :: P FunFile
-funFile =
-    FunFile
-        <$> many (try contractIn)
-        <*> many (try contractOut)
-        <*> many stmt
+funFile = sc *> do
+    ins <- many (optional sc *> contractIn)
+    outs <- many (optional sc *> contractOut)
+    stmts <- many (optional sc *> stmt)
+    pure (FunFile ins outs stmts)
 
 contractIn :: P ContractDecl
 contractIn = do

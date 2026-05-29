@@ -106,3 +106,19 @@ test-suite snapshot-test
         tasty ^>=1.5,
         tasty-hunit ^>=0.10
     default-language: GHC2021
+
+test-suite parser-test
+    import: warnings
+    type: exitcode-stdio-1.0
+    main-is: ParserTest.hs
+    hs-source-dirs: test
+    build-depends:
+        base ^>=4.18.3.0,
+        text,
+        containers,
+        filepath,
+        directory,
+        walk-compiler,
+        tasty ^>=1.5,
+        tasty-hunit ^>=0.10
+    default-language: GHC2021
